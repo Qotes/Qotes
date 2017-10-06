@@ -1,0 +1,145 @@
+{% extends 'bootstrap/base.html' %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block head %}
+{{ super() }}
+<link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
+<link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
+{% endblock head %}
+
+{% block title %}Qotes{% endblock title %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='readable.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='pygments.css') }}">
+{% endblock styles %}
+
+{% block navbar %}
+<div class="navbar navbar-default navbar-fixed-top" role="navigation">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle"
+      data-toggle="collapse" data-target=".navbar-collapse">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="/">Qotes</a>
+    </div>
+    <div class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+          <a href="#" class="tooltip-test" data-toggle="tooltip" data-placement="bottom" title="Click here for a tutorial or some tips.">
+            <span class="glyphicon glyphicon-leaf"></span> Beginner
+          </a>
+        </li>
+        <li>
+          <a href="#" onclick="setbookmark()" id="bookmark" class="tooltip-test" data-toggle="tooltip" data-placement="bottom" title="It turns orange if marked.">
+            <span class="glyphicon glyphicon-bookmark"></span> Bookmark
+          </a>
+        </li>
+      </ul>
+      <form class="navbar-form navbar-left" role="search">
+        <div class="input-group">
+          <input type="text" class="form-control" placeholder="Search"/>
+          <span class="input-group-btn">
+            <button type="submit" class="btn btn-default" disabled="disabled"><!--working on ot -->
+              <span class="glyphicon glyphicon-search"></span>
+            </button>
+          </span>
+        </div>
+      </form>
+      {% block nav_login %}
+      {% if current_user.is_authenticated %}
+      <a href="{{ url_for('main.userpage', username=current_user.kname) }}" class="navbar-right">
+        <img src="{{ current_user.data.get('avatar') }}" alt="{{ current_user.kname }}" class="img-circle img-responsive img-thumbnail" height="80" width="80">
+      </a>
+      {% else %}
+      <button type="button" class="btn btn-default navbar-btn navbar-right">
+        <a href="{{ url_for('auth.login') }}"><span class="glyphicon glyphicon-user"> Login</span></a>
+      </button>
+      {% endif %}
+      {% endblock nav_login %}
+    </div>
+  </div>
+</div>
+{% endblock navbar %}
+
+
+{% block content %}
+<div class="container" id="main">
+  {% for message in get_flashed_messages() %}
+  <div class="alert alert-warning">
+    <button type="button" class="close" data-dismiss="alert">&times;</button>
+    {{ message }}
+  </div>
+  {% endfor %}
+  <div class="row maincontent">
+    {% block page_content %}{% endblock %}
+  </div>
+  <div class="row clearfix othercontent" id="othercontent">
+    {% block page_under %}{% endblock %}
+  </div>
+</div>
+<footer class="navbar-static-bottom" role="navigation">
+  <div class="container">
+    <div class="row">
+      <div class="col-xs-4">
+        <div class="row">
+          <span class="pull-left tooltip-test"  data-toggle="tooltip" data-placement="right" title="Feedback or get help">
+            <span class="glyphicon glyphicon-question-sign"></span>
+            <a href="mailto:support@qotes.top" class="navbar-bottom-content"> support@qotes.top</a>
+          </span>
+        </div>
+        <div class="row">
+          <span class="pull-left tooltip-test"  data-toggle="tooltip" data-placement="right" title="Contact me">
+            <span class="glyphicon glyphicon-envelope"></span>
+            <a href="mailto:sy@qotes.top" class="navbar-bottom-content"> sy@qotes.top</a>
+          </span>
+        </div>
+      </div>
+    <div class="col-xs-4 tooltip-test"  data-toggle="tooltip" data-placement="top" title="Talk is Cheap-Don Williams">
+      <p class="navbar-bottom-middle"><span class="glyphicon glyphicon-music"></span> Get busy living or at least die trying.</p>
+    </div>
+    <div class="col-xs-4">
+      <span class="pull-right"> 
+        <a href="#" class="navbar-bottom-content"><img src="{{ url_for('static', filename='github-write.ico') }}" alt="github">Qotes on GitHub</a>
+      </span>
+    </div>
+    </div>
+    <div class="row">
+      <span>qotes.top ©2017 Sy | <a href="http://www.miitbeian.gov.cn/" class="navbar-bottom-content small">苏ICP备 17056940号</a></span>
+    </div>
+  </div>
+</footer>
+{% endblock content%}
+
+
+{% block scripts %}
+{{ super() }}
+<script>
+  $(function () { $("[data-toggle='tooltip']").tooltip(); });
+</script>
+<script>
+  function setbookmark(){
+    var tmp_href = window.sessionStorage.getItem('tmp-href');
+    if (tmp_href == null) {
+      window.sessionStorage.setItem('tmp-href', window.location.href);
+      $('#main').prepend("<div class='alert alert-warning'><button type='button' class='close' data-dismiss='alert'>&times;</button>Marked !</div>")
+      $("#bookmark").attr("href", '#');
+      $("#bookmark").css('color', 'orange'); // TODO find a way to keep it
+    } else {
+      window.sessionStorage.clear();
+      $("#bookmark").attr("href", tmp_href);
+    }
+  }
+</script>
+<script>
+  $(document).ready(function(){
+    if (window.sessionStorage.getItem('tmp-href')) {
+      $("#bookmark").css('color', 'orange');
+    }
+  });
+</script>
+{% endblock scripts %}

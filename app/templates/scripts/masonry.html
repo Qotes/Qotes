@@ -1,0 +1,8 @@
+{% block masonry %}{# just give the card div an class called "card" #}{# and give the parentnode an class called "masonry" #}
+<script src="{{ url_for('static', filename='masonry.js') }}"></script>
+<script>
+    $('.masonry').masonry({
+        itemSelector: '.card'
+    });
+</script>
+{% endblock masonry %}

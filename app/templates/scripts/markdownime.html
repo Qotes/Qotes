@@ -1,0 +1,58 @@
+{% block markdownime %}{# just give the editable div an id called "markdownime" #}{# and give the hidden form an id called "ime_content" #}
+<script src="{{ url_for('static', filename='MarkdownIME.min.js') }}"></script>
+<script src="https://cdn.bootcss.com/to-markdown/3.1.0/to-markdown.js"></script>
+<script>
+var editor = document.getElementById('markdownime');
+MarkdownIME.Enhance(editor);
+</script>
+<script>
+    function quickcard(){
+        content = $("#markdownime").html();
+        mkcontent = toMarkdown(content);
+        $("#ime_content").val(mkcontent);
+    }
+</script>
+<script>
+    // from http://www.zhangxinxu.com/wordpress/2016/01/contenteditable-plaintext-only/
+    $('[contenteditable]').each(function() {
+    // 干掉IE http之类地址自动加链接
+        try {
+            document.execCommand("AutoUrlDetect", false, false);
+        } catch (e) {}
+
+        $(this).on('paste', function(e) {
+            e.preventDefault();
+            var text = null;
+
+            if(window.clipboardData && clipboardData.setData) {
+            // IE
+            text = window.clipboardData.getData('text');
+            } else {
+            text = (e.originalEvent || e).clipboardData.getData('text/plain') || prompt('在这里输入文本');
+            } if (document.body.createTextRange) {
+                if (document.selection) {
+                    textRange = document.selection.createRange();
+                } else if (window.getSelection) {
+                    sel = window.getSelection();
+                    var range = sel.getRangeAt(0);
+                    
+                    // 创建临时元素，使得TextRange可以移动到正确的位置
+                    var tempEl = document.createElement("span");
+                    tempEl.innerHTML = "&#FEFF;";
+                    range.deleteContents();
+                    range.insertNode(tempEl);
+                    textRange = document.body.createTextRange();
+                    textRange.moveToElementText(tempEl);
+                    tempEl.parentNode.removeChild(tempEl);
+                }
+                textRange.text = text;
+                textRange.collapse(false);
+                textRange.select();
+            } else {
+                // Chrome之类浏览器
+                document.execCommand("insertText", false, text);
+            }
+        });
+    });
+</script>
+{% endblock markdownime %}

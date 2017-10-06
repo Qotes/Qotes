@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+{% import 'scripts/pagemacro.html' as pagemacro %}
+
+{% block title %}{{ card.data.get('title') }}-Card-Qotes{% endblock %}
+
+{% block page_content %}
+<div class="col-md-9 column">
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h1 class="panel-title">
+        {{ card.data.get('title') }}
+        <a href="{{ sidebar[2] }}"><span class="glyphicon glyphicon-folder-open tooltip-test"  data-toggle="tooltip" data-placement="top" title="Collection"></span></a>
+        <a href="{{ url_for('main.move', cardid=card.data.get('_id')) }}">
+          <span class="glyphicon glyphicon-share tooltip-test pull-right"  data-toggle="tooltip" data-placement="top" title="Move higher"></span>
+        </a>
+      </h1>
+    </div>
+    <div class="panel-body" contentEditable="true", id="markdownime" spellcheck="false">
+      {% if card.html %}{{ card.html | safe }}{% else %}{{ card.data.get('content') }}{% endif %}
+    </div>
+    <div class="panel-footer">  
+      Created:{{ moment(card.data.get('since')).format('L') }}
+      <a href="#" class='btn btn-link' role="button" disabled="disabled">
+        <span class="glyphicon glyphicon-duplicate tooltip-test"  data-toggle="tooltip" data-placement="top" title="Quote"></span>
+      </a>
+      <a href="#" class='btn btn-link' role="button" disabled="disabled">
+        <span class="glyphicon glyphicon-eye-open tooltip-test"  data-toggle="tooltip" data-placement="top" title="Public"></span>
+      </a>
+      <a href="{{ url_for('main.userpage', username=card.data.get('author')) }}" class='btn btn-link' role="button">
+        <span class="glyphicon glyphicon-user tooltip-test"  data-toggle="tooltip" data-placement="top" title="User"></span>
+      </a>
+      {% if current_user.kname == card.data.get('author') %}
+      <a href="{{ url_for('main.edit', cardid=card.data.get('_id')) }}" class='btn btn-link' role="button">
+        <span class="glyphicon glyphicon-edit tooltip-test"  data-toggle="tooltip" data-placement="top" title="Edit"></span>
+      </a>
+      <a href="{{ url_for('main.delete', cardid=card.data.get('_id')) }}" class='btn btn-link' role="button" onclick="if(confirm('Sure to Delete it ?')==false)return false;">
+          <span class="glyphicon glyphicon-trash tooltip-test"  data-toggle="tooltip" data-placement="top" title="Delete"></span>
+      </a>
+      {% endif %}
+      
+      <form action="", method="POST">
+        {{ quickcard_form.hidden_tag() }}
+        {{ quickcard_form.content(id="ime_content", type="hidden") }}
+        {# quickcard_form.submit() #}<!-- the submit is blocked -->
+      </form>
+    </div>
+  </div>
+  <h2 >Subcards of {{ card.data.get('title') }}</h2>
+  <div class="row masonry">
+    {% include 'card/wildcards.html' %}
+    {% if current_user.kname == card.data.get('author') %}
+    <div class="column col-xs-12 col-sm-6 col-md-4 card">
+      <a href="{{ url_for('main.write', from=card.data.get('_id')) }}">
+        <div class="panel panel-success">
+          <div class="panel-heading"><h1 class="panel-title">New card</h1></div>
+          <div class="panel-body"><h1 class="text-center text-success"><span class="glyphicon glyphicon-plus addsubcard"></span></h1></div>
+        </div>
+      </a>
+    </div>
+    {% endif %}
+  </div>
+  <div class="row pagination">
+    {{ pagemacro.pagination_widget(pagination, 'main.cardpage', cardid=card.data.get('_id'))}}
+  </div>
+</div>
+
+<div class="col-md-3 column">
+  <div class="panel panel-primary" role="toolbar">
+    <div class="panel-heading"><a href="{{ sidebar[2] }}"><span class="glyphicon glyphicon-folder-open"></span> {{ sidebar[0] }}</a></div>
+    <div class="list-group">
+      {% for sibling in sidebar[1] %}
+      <a class="list-group-item" href="{{ url_for('main.cardpage', cardid=sibling.get('_id')) }}" id="{{ sibling.get('_id') }}">
+        {{ sibling.get('title') }}
+      </a>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+{% endblock page_content %}
+
+{% block scripts %}
+{{ super() }}
+{{ moment.include_moment(local_js=url_for('static', filename='moment.js')) }}
+{% include 'scripts/masonry.html' %}
+{% include 'scripts/markdownime.html' %}
+{% include 'scripts/allowdrop.html' %}
+<script>
+  var activeID = "{{ card.data.get('_id') }}";
+  document.getElementById(activeID).className='list-group-item list-group-item-success';
+</script>
+{% endblock scripts %}

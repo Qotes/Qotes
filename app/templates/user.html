@@ -1,0 +1,117 @@
+{% extends 'base.html' %}
+{% import 'scripts/pagemacro.html' as pagemacro %}
+
+{% block title %}{{ user['kname'] }} - Profile - Qotes{% endblock %}
+
+{% block page_content %}
+<div class="col-md-9 column">
+  <h2 >Card collections of {{ user['kname'] }}</h2>
+  <div class="row masonry">
+    {% include 'card/wildcards.html' %}
+    {% if current_user.kname == user.get('kname') %}
+    <div class="column col-xs-12 col-sm-6 col-md-4 card">
+      <a href="{{ url_for('main.write', from=user.get('kname')) }}">
+        <div class="panel panel-success">
+          <div class="panel-heading"><h1 class="panel-title">New collection</h1></div>
+          <div class="panel-body"><h1 class="text-center text-success"><span class="glyphicon glyphicon-plus addsubcard"></span></h1></div>
+        </div>
+      </a>
+    </div>
+    {% endif %}
+  </div>
+  <div class="row pagination">
+    {{ pagemacro.pagination_widget(pagination, 'main.userpage', username=current_user.kname)}}
+  </div>
+  <h2 >Latest cards of {{ user['kname'] }}</h2>
+  <div class="row masonry">
+    {% for card in latestcards %}
+    <div class="column col-xs-12 col-sm-6 col-md-4 card">
+      <div class="panel panel-primary" id="{{ card.get('_id') }}">
+        <div class="panel-heading"><h1 class="panel-title">{{ card.get('title') }}</h1></div>
+        <div class="panel-body">
+          {% for gist in card.get('gist') %}
+          <p class='gist'>{{ gist }}</p>
+          {% endfor %}
+        </div>
+        <div class="panel-footer">
+          <div class="row">
+            <a href="{{ url_for('main.cardpage', cardid=card.get('_id')) }}" class='col-xs-2' role="button">
+              <span class="glyphicon glyphicon-file tooltip-test"  data-toggle="tooltip" data-placement="top" title="View"></span>
+            </a>
+            <a href="{{ url_for('main.edit', cardid=card.get('_id')) }}" class='col-xs-2' role="button">
+              <span class="glyphicon glyphicon-edit tooltip-test"  data-toggle="tooltip" data-placement="top" title="Edit"></span>
+            </a>
+            <a href="{{ url_for('main.delete', cardid=card.get('_id')) }}" class='col-xs-offset-5 col-xs-2' role="button" onclick="if(confirm('Sure to Delete it ?')==false)return false;">
+              <span class="glyphicon glyphicon-trash tooltip-test"  data-toggle="tooltip" data-placement="top" title="Delete"></span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+
+<div class="col-md-3 column">
+  <ul class="list-group">
+    <li class="list-group-item">
+      <div class="page-header sidebar-avatar">
+        <img src="{{ user.get('avatar')}}" alt="{{ user.get('kname') }}" class="img-rounded img-responsive img-thumbnail" height="60" width="60">  {{ user['kname'] }}
+      </div>
+      <div>follers</div>
+    </li>
+    <li class="list-group-item">
+      <h5><small>Tags</small></h5>
+      python 3<!-- TODO -->
+    </li>
+    {% if user.get('kname')==current_user.kname %}
+      <li class="list-group-item">
+        {% if user.get('email') %}
+          <h5><small>Email</small></h5>
+          <a href="mailto:{{ user['email'] }}">{{ user['email'] }}</a>
+        {% endif %}
+        <h5><small>Member since </small></h5>
+        {{ moment(user['since']).format('L') }}.
+        <h5><small>Last seen </small></h5>
+        {{ moment(user['lastseen']).fromNow() }}.
+      </li>
+      <li class="list-group-item">
+        <h5><small>About me</small></h5>
+        {{  user.get('aboutme') }}
+        <div class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+            <span class="glyphicon glyphicon-ok"></span>
+          </a>
+          <div role="form" class="dropdown-menu" role="menu">
+            <form id="aboutme_form" action="" method="post" class="form" role="form">
+              {{ aboutme_form.hidden_tag() }}
+              <div class="form-group">{{ aboutme_form.aboutme(rows=2, class_="form-control", id="aboutme_edit") }}</div>
+              <div class="form-group">{{ aboutme_form.submit(class="btn btn-default pull-right") }}</div>
+            </form >
+          </div>
+        </div>
+      </li>
+    {% else %}
+      <li class="list-group-item">
+        <h5><small>About me</small></h5>
+        {{ user.get('aboutme') }}
+      </li>
+    {% endif %}
+  </ul>
+    <p>
+      {# if user['kname'] == current_user.kname %}
+      <a class="btn btn-default" href="{{ url_for('main.edit_profile') }}">Edit Profile</a>
+      {% endif #}
+    </p>
+</div>
+{% endblock page_content %}
+
+{% block scripts %}
+{{ super() }}
+{{ moment.include_moment(local_js=url_for('static', filename='moment.js')) }}
+<script>
+  document.getElementById("aboutme_edit").value="{{ user.get('aboutme') }}"
+</script>
+{% include 'scripts/masonry.html' %}
+{% include 'scripts/allowdrop.html' %}
+{% endblock scripts %}

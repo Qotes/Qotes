@@ -91,7 +91,7 @@ class User(UserMixin):
     def email(self):
         """Tracks the email of a user by kname
         """
-        return db.sser.find_one({'kname':self.kname}).get('email')
+        return db.user.find_one({'kname':self.kname}).get('email')
 
     def get_id(self):
         """
@@ -290,7 +290,7 @@ class Permission(object):
     roles = {
         'ADMIN': 0xff,                                 # me
         'ANONY': READ,
-        'USRE': READ|WRITE|EDIT|FOLLOW,                # default
+        'USER': READ|WRITE|EDIT|FOLLOW,                # default
         'SUPER': READ|WRITE|EDIT|FOLLOW|READ_ALL,      # special users
     }
 

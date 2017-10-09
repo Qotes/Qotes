@@ -27,8 +27,9 @@ class Config(object):
     MAIL_USERNAME = os.environ.get('QOTES_MAIL_USERNAME') or 'check@qotes.top'
     MAIL_PASSWORD = os.environ.get('QOTES_MAIL_PASSWORD')
     MAIL_SERVER = os.environ.get('QOTES_MAIL_SERVER') or 'smtp.mxhichina.com'
-    MAIL_PORT = os.environ.get('QOTES_MAIL_SERVER') or 25  #tls465
+    MAIL_PORT = os.environ.get('QOTES_MAIL_SERVER') or 465  # default 25
     MAIL_USE_TLS = False
+    MAIL_USE_SSL = True
 
     @staticmethod
     def init_app(app):

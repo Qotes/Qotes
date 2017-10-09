@@ -40,7 +40,7 @@ bootstrap = Bootstrap()
 moment = Moment()
 mail = Mail()
 # pymongo is not an ODM so it's a bit little different
-mongoclient = MongoClient('mongodb://qotes:qotes@127.0.0.1')
+mongoclient = MongoClient('mongodb://qotes:qotes@127.0.0.1', connect=False)
 db = mongoclient.qotes
 # specific settings for loginmanager
 loginmanager.session_protection = 'strong'

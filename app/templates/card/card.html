@@ -15,10 +15,10 @@
         </a>
       </h1>
     </div>
-    <div class="panel-body" contentEditable="true", id="markdownime" spellcheck="false">
+    <div class="panel-body" contentEditable="false", id="markdownime" spellcheck="false"><!--edit blocked-->
       {% if card.html %}{{ card.html | safe }}{% else %}{{ card.data.get('content') }}{% endif %}
     </div>
-    <div class="panel-footer">  
+    <div class="panel-footer">
       Created:{{ moment(card.data.get('since')).format('L') }}
       <a href="#" class='btn btn-link' role="button" disabled="disabled">
         <span class="glyphicon glyphicon-duplicate tooltip-test"  data-toggle="tooltip" data-placement="top" title="Quote"></span>

@@ -10,7 +10,7 @@
     {% include 'card/wildcards.html' %}
     {% if current_user.kname == user.get('kname') %}
     <div class="column col-xs-12 col-sm-6 col-md-4 card">
-      <a href="{{ url_for('main.write', from=user.get('kname')) }}">
+      <a href="{{ url_for('main.write') }}">
         <div class="panel panel-success">
           <div class="panel-heading"><h1 class="panel-title">New collection</h1></div>
           <div class="panel-body"><h1 class="text-center text-success"><span class="glyphicon glyphicon-plus addsubcard"></span></h1></div>

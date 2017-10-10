@@ -101,7 +101,7 @@ def write():
         fatherid = request.args.get('from')
         # check the identity
         if fatherid:
-            if fatherid != Card.card_or_404(fatherid).data.get('author'):
+            if current_user.kname != Card.card_or_404(fatherid).data.get('author'):
                 flash('Permission denied')
                 return redirect(url_for('main.write'))
         # add it to db

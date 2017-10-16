@@ -5,10 +5,10 @@
 - Qotes is a web application based on Flask and MongoDB.
 - Qotes is designed to help you with your notes especially study notes.
 - Qotes uses **cards** as records of notes, which take Markdown for default.
-- The cards is like nodes in a tree structure with the auther as the root, which means every card will consist of several cards and so on.
+- The cards are like nodes in a tree structure with the author as the root, which means every card will consist of several cards and so on.
 - Both in full content mode or just the broad outline mode can the cards be viewed.
 
-## TECHNOLOGY COLOPHON
+## Technology Colophon
 
 - HTML5, Bootstrap, jQuery
 - Nginx, Flask, MongoDB

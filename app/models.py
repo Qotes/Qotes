@@ -332,6 +332,7 @@ class Card(object):
             'lastedit': datetime.utcnow(),            # timestamp of editing
             'tags': [],                               # TODO inter author
             'poster':'',                              # TODO optional image
+            'prvt': True,                            # private Card
         }
         db.card.insert_one(new_card)                  # notice! insert into database
 
@@ -506,15 +507,33 @@ class Card(object):
         result_dad = db.card.delete_one({'_id':ObjectId(cardid)})
         return {'card': result_dad, 'subcards': result}
 
-    @property
-    def siblings(self):
-        """returns a cursor of the siblings,
-        the card is supposed to be with data,
-        it returns only twenty siblings as result.
+    def public(self):
+        """public a private card, the card is supposed to be with
+        cardid or fetched by Card.card_or_404,
+        the url is `/card/edit/cardid?private=0`
         """
-        cursor = db.card.find({'dad': self.data.get('dad')}).limit(20)
-        return cursor
+        db.card.update_one(
+            {'_id': self._id},
+            {'$set': {'prvt': False}}
+        )
 
+    def private(self):
+        """reverse to Card.public"""
+        db.card.update_one(
+            {'_id': self._id},
+            {'$set': {'prvt': True}}
+        )
+
+    @staticmethod
+    def get_sons(fathername, userfrom=None, cardowner=None):
+        """get the subcards of the `fathername`, it will check the auth
+        to return all cards or just public cards, it returns a cursor
+        so it can be accessed by other methods
+        """
+        if userfrom == cardowner:
+            return db.card.find({'dad': fathername})
+        else:
+            return db.card.find({'dad': fathername, 'prvt':False})
 
 # ------------------------------------------------------------------------------------------------
 

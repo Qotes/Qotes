@@ -68,8 +68,9 @@ def userpage(username):
     user = db.user.find_one({'kname': username})                # it's a dict
     if user is None:
         abort(404)
-    #posts
-    cursor = db.card.find({'dad': username})                  # it is a cursor
+    # posts
+    cursor = Card.get_sons(username, current_user.kname, username)   # cursor
+    # pagination
     current_page = request.args.get('page') or 1
     pagination = Pagination(cursor, current_page)
     cards = pagination.page                                   # it is a cursor
@@ -116,10 +117,9 @@ def cardpage(cardid):
     """
     show the sons of a card or user
     """
-    quickcard_form = QuickCardForm()
     card = Card.card_or_404(cardid)                           # it's a Card
     # for pagination
-    cursor = db.card.find({'dad': cardid})                     # it's a cursor
+    cursor = Card.get_sons(cardid, current_user.kname, card.data.get('author'))    # cursor
     current_page = request.args.get('page') or 1
     pagination = Pagination(cursor, current_page)
     cards = pagination.page                                   # it is a cursor
@@ -131,16 +131,19 @@ def cardpage(cardid):
         fatherlink = url_for('main.userpage', username=fathername)
     else:
         fatherlink = url_for('main.cardpage', cardid=fatherid)
-    sidebar = [fathername, card.siblings, fatherlink]
+    siblings = Card.get_sons(card.data.get('dad'), current_user.kname, card.data.get('author'))
+    sidebar = [fathername, siblings.limit(20), fatherlink]
     # blocked in html --------------------------------------------------------------------
     # I blocked this method right now as I haven't found a nice way to transfer html to md
-    if quickcard_form.validate_on_submit():
-        Card.edit(cardid, quickcard_form.content.data, is_html=True)  # notice! update the database
-        flash('Card edited.')
-        return redirect(url_for('main.cardpage', cardid=cardid))  # POST-REDIRECT-GET
+    # I decided to make this available when I finish the editor by my own
+    # quickcard_form = QuickCardForm()
+    # if quickcard_form.validate_on_submit():
+    #     Card.edit(cardid, quickcard_form.content.data, is_html=True)
+    #     flash('Card edited.')
+    #     return redirect(url_for('main.cardpage', cardid=cardid))  # POST-REDIRECT-GET
     # blocked in html --------------------------------------------------------------------
     return render_template('card/card.html',
-                           quickcard_form=quickcard_form,
+                           # quickcard_form=quickcard_form,
                            card=card,
                            pagination=pagination,
                            sidebar=sidebar,
@@ -175,6 +178,14 @@ def edit(cardid):
     card = Card.card_or_404(cardid)   # it's a Card
     if current_user.kname != card.data.get('author'):
         flash('Permission Denied')
+        return redirect(url_for('main.cardpage', cardid=cardid))
+    if request.args.get('private') == '0':
+        card.public()
+        flash('This card is public now!')
+        return redirect(url_for('main.cardpage', cardid=cardid))
+    if request.args.get('private') == '1':
+        card.private()
+        flash('This card is pravite now!')
         return redirect(url_for('main.cardpage', cardid=cardid))
     card = card.data.get('content')  # it's content
     edit_form = WriteForm()

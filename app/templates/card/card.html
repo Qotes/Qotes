@@ -23,9 +23,15 @@
       <a href="#" class='btn btn-link' role="button" disabled="disabled">
         <span class="glyphicon glyphicon-duplicate tooltip-test"  data-toggle="tooltip" data-placement="top" title="Quote"></span>
       </a>
-      <a href="#" class='btn btn-link' role="button" disabled="disabled">
+      {% if card.data.get('prvt') == False %}
+      <a href="{{ url_for('main.edit', cardid=card.data.get('_id'), private=1) }}" class='btn btn-link' role="button">
         <span class="glyphicon glyphicon-eye-open tooltip-test"  data-toggle="tooltip" data-placement="top" title="Public"></span>
       </a>
+      {% else %}
+      <a href="{{ url_for('main.edit', cardid=card.data.get('_id'), private=0) }}" class='btn btn-link' role="button">
+        <span class="glyphicon glyphicon-eye-close tooltip-test"  data-toggle="tooltip" data-placement="top" title="Private"></span>
+      </a>
+      {% endif %}
       <a href="{{ url_for('main.userpage', username=card.data.get('author')) }}" class='btn btn-link' role="button">
         <span class="glyphicon glyphicon-user tooltip-test"  data-toggle="tooltip" data-placement="top" title="User"></span>
       </a>
@@ -39,8 +45,8 @@
       {% endif %}
       
       <form action="", method="POST">
-        {{ quickcard_form.hidden_tag() }}
-        {{ quickcard_form.content(id="ime_content", type="hidden") }}
+        {# quickcard_form.hidden_tag() #}
+        {# quickcard_form.content(id="ime_content", type="hidden") #}
         {# quickcard_form.submit() #}<!-- the submit is blocked -->
       </form>
     </div>

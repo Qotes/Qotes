@@ -74,7 +74,8 @@ def userpage(username):
     current_page = request.args.get('page') or 1
     pagination = Pagination(cursor, current_page)
     cards = pagination.page                                   # it is a cursor
-    latestcards = db.card.find({'author': username}).sort('since', DESCENDING).limit(5)
+    # TODO CHECK WHETHER CURSOR DEAD IF QUERIED AGAIN
+    latestcards = db.card.find({'author': username, 'prvt': False}).sort('since', DESCENDING).limit(5)
     if current_user.kname == username and aboutme_form.validate_on_submit():
         db.user.update_one(
             {'kname': username},

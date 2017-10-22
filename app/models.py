@@ -179,7 +179,7 @@ class User(UserMixin):
     @staticmethod
     def chk_api_token(token):
         """
-        check the token for api,
+        check the token for api, as a wrapper of `user_or_none`
         it returns a User with data, if user not verified,
         the data will be an empty dictionary {}
         """
@@ -449,7 +449,7 @@ class Card(object):
             abort(404)
         return Card(_id=cardid, data=data)
 
-    def to_json(self):
+    def to_json(self, userfrom=None):
         """
         This method is supposed to be called by card found by
         `card_or_404()` which means it is a Card with data.
@@ -464,19 +464,21 @@ class Card(object):
             'timestamp': data.get('since'),
             'content': data.get('content'),
             'father': data.get('dad'),
-            'sons': [card.get('_id') for card in db.card.find({'dad': data.get('_id')})]
+            'sons': [card.get('_id') for card in self.get_sons(data.get('_id'), userfrom, data.get('author'))]
         }
         return json_card
 
     @staticmethod
     def addson(father, son):
         """
-        add a card to anther, if there's something wrong, nothing will be done
+        add a card to anther, the auth are all not checked,
+        if there's something wrong, nothing will be done
         """
-        if father and son and father != son:            # notice! update database
-            db.card.update_one({'_id': ObjectId(son)}, {'$set': {'dad': father}})
+        if father and son and father != son:
+            result = db.card.update_one({'_id': ObjectId(son)}, {'$set': {'dad': father}}).raw_result
+            return {'found': bool(result.get('n')), 'modified': bool(result.get('nModified'))}
 
-    def delete(self, cardid=None, _all=False):
+    def delete(self, cardid=None, _all=None):
         """
         delete a card,
 
@@ -491,7 +493,7 @@ class Card(object):
                 cardid = self.data.get('_id')
             except AttributeError:
                 abort(500)
-        if _all is False:
+        if not _all:
             # move the sons to their grandpa
             grandpa = db.card.find_one({'_id': ObjectId(cardid)}).get('dad')
             result = db.card.update_many(
@@ -501,8 +503,7 @@ class Card(object):
             result = result.raw_result
         else:
             # delete all the subcards
-            result = db.card.delete_many({'dad': cardid})
-            result = result.raw_result
+            result = db.card.delete_many({'dad': cardid}).raw_result
         # delete the objected card
         result_dad = db.card.delete_one({'_id':ObjectId(cardid)})
         return {'card': result_dad, 'subcards': result}
@@ -525,10 +526,10 @@ class Card(object):
         )
 
     @staticmethod
-    def get_sons(fathername, userfrom=None, cardowner=None):
-        """get the subcards of the `fathername`, it will check the auth
-        to return all cards or just public cards, it returns a cursor
-        so it can be accessed by other methods
+    def get_sons(fathername, userfrom=None, cardowner=None, page=1):
+        """get the subcards of the `fathername`, it will check the auth to
+        return all cards or just public cards, it returns a cursor so it can
+        be accessed by other methods
         """
         if userfrom == cardowner:
             return db.card.find({'dad': fathername})

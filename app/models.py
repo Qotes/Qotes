@@ -526,7 +526,7 @@ class Card(object):
         )
 
     @staticmethod
-    def get_sons(fathername, userfrom=None, cardowner=None, page=1):
+    def get_sons(fathername, userfrom=None, cardowner=None):
         """get the subcards of the `fathername`, it will check the auth to
         return all cards or just public cards, it returns a cursor so it can
         be accessed by other methods

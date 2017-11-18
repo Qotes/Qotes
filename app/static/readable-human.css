@@ -6953,3 +6953,7 @@ body{
 .sidebar-avatar {
   margin-top: 0;
 }
+
+.panel-body img {
+  max-width: 100%;
+}

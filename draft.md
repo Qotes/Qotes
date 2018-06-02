@@ -8,14 +8,41 @@
 user = {
     nickname: 'Sy',
     email: 'somarl@live.com',
-    cards: [
+    qotes: [ // 直属卡片
+        'imGrqeQD',
+        'mGiqeQrg',
+        ...
+    ],
+    _all: [ // 所有卡片
         'imGrqeQD',
         'mGiqeQrg',
         ...
     ],
     permissions: 0b11111111
+    // followers/following/registerd/lastseen ...
 }
 ```
+
+```javascript
+qote = {
+    title: 'Get started', // 自动H1生成
+    date: new Date(),
+    gist: [ // 自动H2生成
+        "What's Qotes",
+        'Why do I need it',
+        'How to qote'
+    ]
+    author: 'Sy',
+    parent: 'imGrqeQD' // 如果是''则是作者的直属卡片
+    permissions: 0b00000001
+}
+```
+
+### 结构的区分
+
+user作为树的根节点和qote并无太大差别,都是card.
+
+最明显的差别在于qote不记录自身的子node,但是user需要,并且还分别记录直属qotes和下属qotes.
 
 ## 操作
 
@@ -27,7 +54,7 @@ user = {
 // request(cardID/userID) ----> response([currentCard subCard1 subCard2 ...])
 requestJson = {
     requestID: 'imGrqeQD',
-    requestType: 'card',
+    requestType: 'qote', // user
     meta: {
         offset: 0,
         limit: 20

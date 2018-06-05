@@ -1,4 +1,6 @@
 {
-    "python.venvPath": "${workspaceRoot}/venv",
-    "python.pythonPath": "${workspaceRoot}\\venv\\Scripts\\python.exe"
+    "editor.tabSize": 2,
+    "markdownlint.config": {
+        "MD024": false
+    },
 }

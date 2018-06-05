@@ -141,6 +141,7 @@ ENV/
 # vscode settings
 .vscode/
 
-# front
+
+# node_modules
+**/node_modules
 node_modules
-# yarn

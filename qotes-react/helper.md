@@ -8,7 +8,6 @@ You can find the most recent version of this guide [here](https://github.com/fac
 ## Table of Contents
 
 - [Updating to New Releases](#updating-to-new-releases)
-- [Sending Feedback](#sending-feedback)
 - [Folder Structure](#folder-structure)
 - [Available Scripts](#available-scripts)
   - [npm start](#npm-start)
@@ -17,10 +16,7 @@ You can find the most recent version of this guide [here](https://github.com/fac
   - [npm run eject](#npm-run-eject)
 - [Supported Browsers](#supported-browsers)
 - [Supported Language Features and Polyfills](#supported-language-features-and-polyfills)
-- [Syntax Highlighting in the Editor](#syntax-highlighting-in-the-editor)
-- [Displaying Lint Output in the Editor](#displaying-lint-output-in-the-editor)
 - [Debugging in the Editor](#debugging-in-the-editor)
-- [Formatting Code Automatically](#formatting-code-automatically)
 - [Changing the Page `<title>`](#changing-the-page-title)
 - [Installing a Dependency](#installing-a-dependency)
 - [Importing a Component](#importing-a-component)
@@ -34,15 +30,10 @@ You can find the most recent version of this guide [here](https://github.com/fac
   - [Adding Assets Outside of the Module System](#adding-assets-outside-of-the-module-system)
   - [When to Use the `public` Folder](#when-to-use-the-public-folder)
 - [Using Global Variables](#using-global-variables)
-- [Adding Bootstrap](#adding-bootstrap)
-  - [Using a Custom Theme](#using-a-custom-theme)
-- [Adding Flow](#adding-flow)
 - [Adding a Router](#adding-a-router)
 - [Adding Custom Environment Variables](#adding-custom-environment-variables)
   - [Referencing Environment Variables in the HTML](#referencing-environment-variables-in-the-html)
-  - [Adding Temporary Environment Variables In Your Shell](#adding-temporary-environment-variables-in-your-shell)
   - [Adding Development Environment Variables In `.env`](#adding-development-environment-variables-in-env)
-- [Can I Use Decorators?](#can-i-use-decorators)
 - [Fetching Data with AJAX Requests](#fetching-data-with-ajax-requests)
 - [Integrating with an API Backend](#integrating-with-an-api-backend)
   - [Node](#node)
@@ -121,10 +112,6 @@ To update an existing project to a new version of `react-scripts`, [open the cha
 In most cases bumping the `react-scripts` version in `package.json` and running `npm install` in this folder should be enough, but it’s good to consult the [changelog](https://github.com/facebookincubator/create-react-app/blob/master/CHANGELOG.md) for potential breaking changes.
 
 We commit to keeping the breaking changes minimal so you can upgrade `react-scripts` painlessly.
-
-## Sending Feedback
-
-We are always open to [your feedback](https://github.com/facebookincubator/create-react-app/issues).
 
 ## Folder Structure
 
@@ -232,33 +219,6 @@ If you use any other ES6+ features that need **runtime support** (such as `Array
 
 Also note that using some newer syntax features like `for...of` or `[...nonArrayValue]` causes Babel to emit code that depends on ES6 runtime features and might not work without a polyfill. When in doubt, use [Babel REPL](https://babeljs.io/repl/) to see what any specific syntax compiles down to.
 
-## Syntax Highlighting in the Editor
-
-To configure the syntax highlighting in your favorite text editor, head to the [relevant Babel documentation page](https://babeljs.io/docs/editors) and follow the instructions. Some of the most popular editors are covered.
-
-## Displaying Lint Output in the Editor
-
->Note: this feature is available with `react-scripts@0.2.0` and higher.<br>
->It also only works with npm 3 or higher.
-
-Some editors, including Sublime Text, Atom, and Visual Studio Code, provide plugins for ESLint.
-
-They are not required for linting. You should see the linter output right in your terminal as well as the browser console. However, if you prefer the lint results to appear right in your editor, there are some extra steps you can do.
-
-You would need to install an ESLint plugin for your editor first. Then, add a file called `.eslintrc` to the project root:
-
-```js
-{
-  "extends": "react-app"
-}
-```
-
-Now your editor should report the linting warnings.
-
-Note that even if you edit your `.eslintrc` file further, these changes will **only affect the editor integration**. They won’t affect the terminal and in-browser lint output. This is because Create React App intentionally provides a minimal set of rules that find common mistakes.
-
-If you want to enforce a coding style for your project, consider using [Prettier](https://github.com/jlongster/prettier) instead of ESLint style rules.
-
 ## Debugging in the Editor
 
 **This feature is currently only supported by [Visual Studio Code](https://code.visualstudio.com) and [WebStorm](https://www.jetbrains.com/webstorm/).**
@@ -303,56 +263,6 @@ In the WebStorm menu `Run` select `Edit Configurations...`. Then click `+` and s
 Start your app by running `npm start`, then press `^D` on macOS or `F9` on Windows and Linux or click the green debug icon to start debugging in WebStorm.
 
 The same way you can debug your application in IntelliJ IDEA Ultimate, PhpStorm, PyCharm Pro, and RubyMine.
-
-## Formatting Code Automatically
-
-Prettier is an opinionated code formatter with support for JavaScript, CSS and JSON. With Prettier you can format the code you write automatically to ensure a code style within your project. See the [Prettier's GitHub page](https://github.com/prettier/prettier) for more information, and look at this [page to see it in action](https://prettier.github.io/prettier/).
-
-To format our code whenever we make a commit in git, we need to install the following dependencies:
-
-```sh
-npm install --save husky lint-staged prettier
-```
-
-Alternatively you may use `yarn`:
-
-```sh
-yarn add husky lint-staged prettier
-```
-
-* `husky` makes it easy to use githooks as if they are npm scripts.
-* `lint-staged` allows us to run scripts on staged files in git. See this [blog post about lint-staged to learn more about it](https://medium.com/@okonetchnikov/make-linting-great-again-f3890e1ad6b8).
-* `prettier` is the JavaScript formatter we will run before commits.
-
-Now we can make sure every file is formatted correctly by adding a few lines to the `package.json` in the project root.
-
-Add the following line to `scripts` section:
-
-```diff
-  "scripts": {
-+   "precommit": "lint-staged",
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-```
-
-Next we add a 'lint-staged' field to the `package.json`, for example:
-
-```diff
-  "dependencies": {
-    // ...
-  },
-+ "lint-staged": {
-+   "src/**/*.{js,jsx,json,css}": [
-+     "prettier --single-quote --write",
-+     "git add"
-+   ]
-+ },
-  "scripts": {
-```
-
-Now, whenever you make a commit, Prettier will format the changed files automatically. You can also run `./node_modules/.bin/prettier --single-quote --write "src/**/*.{js,jsx,json,css}"` to format your entire project for the first time.
-
-Next you might want to integrate Prettier in your favorite editor. Read the section on [Editor Integration](https://prettier.io/docs/en/editors.html) on the Prettier GitHub page.
 
 ## Changing the Page `<title>`
 
@@ -701,8 +611,6 @@ An alternative way of handling static assets is described in the next section.
 
 ## Using the `public` Folder
 
->Note: this feature is available with `react-scripts@0.5.0` and higher.
-
 ### Changing the HTML
 
 The `public` folder contains the HTML file so you can tweak it, for example, to [set the page title](#changing-the-page-title).
@@ -777,69 +685,6 @@ This makes it obvious you are using a global variable intentionally rather than 
 
 Alternatively, you can force the linter to ignore any line by adding `// eslint-disable-line` after it.
 
-## Adding Bootstrap
-
-You don’t have to use [React Bootstrap](https://react-bootstrap.github.io) together with React but it is a popular library for integrating Bootstrap with React apps. If you need it, you can integrate it with Create React App by following these steps:
-
-Install React Bootstrap and Bootstrap from npm. React Bootstrap does not include Bootstrap CSS so this needs to be installed as well:
-
-```sh
-npm install --save react-bootstrap bootstrap@3
-```
-
-Alternatively you may use `yarn`:
-
-```sh
-yarn add react-bootstrap bootstrap@3
-```
-
-Import Bootstrap CSS and optionally Bootstrap theme CSS in the beginning of your ```src/index.js``` file:
-
-```js
-import 'bootstrap/dist/css/bootstrap.css';
-import 'bootstrap/dist/css/bootstrap-theme.css';
-// Put any other imports below so that CSS from your
-// components takes precedence over default styles.
-```
-
-Import required React Bootstrap components within ```src/App.js``` file or your custom component files:
-
-```js
-import { Navbar, Jumbotron, Button } from 'react-bootstrap';
-```
-
-Now you are ready to use the imported React Bootstrap components within your component hierarchy defined in the render method. Here is an example [`App.js`](https://gist.githubusercontent.com/gaearon/85d8c067f6af1e56277c82d19fd4da7b/raw/6158dd991b67284e9fc8d70b9d973efe87659d72/App.js) redone using React Bootstrap.
-
-### Using a Custom Theme
-
-Sometimes you might need to tweak the visual styles of Bootstrap (or equivalent package).<br>
-We suggest the following approach:
-
-* Create a new package that depends on the package you wish to customize, e.g. Bootstrap.
-* Add the necessary build steps to tweak the theme, and publish your package on npm.
-* Install your own theme npm package as a dependency of your app.
-
-Here is an example of adding a [customized Bootstrap](https://medium.com/@tacomanator/customizing-create-react-app-aa9ffb88165) that follows these steps.
-
-## Adding Flow
-
-Flow is a static type checker that helps you write code with fewer bugs. Check out this [introduction to using static types in JavaScript](https://medium.com/@preethikasireddy/why-use-static-types-in-javascript-part-1-8382da1e0adb) if you are new to this concept.
-
-Recent versions of [Flow](http://flowtype.org/) work with Create React App projects out of the box.
-
-To add Flow to a Create React App project, follow these steps:
-
-1. Run `npm install --save flow-bin` (or `yarn add flow-bin`).
-2. Add `"flow": "flow"` to the `scripts` section of your `package.json`.
-3. Run `npm run flow init` (or `yarn flow init`) to create a [`.flowconfig` file](https://flowtype.org/docs/advanced-configuration.html) in the root directory.
-4. Add `// @flow` to any files you want to type check (for example, to `src/App.js`).
-
-Now you can run `npm run flow` (or `yarn flow`) to check the files for type errors.
-You can optionally use an IDE like [Nuclide](https://nuclide.io/docs/languages/flow/) for a better integrated experience.
-In the future we plan to integrate it into Create React App even more closely.
-
-To learn more about Flow, check out [its documentation](https://flowtype.org/).
-
 ## Adding a Router
 
 Create React App doesn't prescribe a specific routing solution, but [React Router](https://reacttraining.com/react-router/) is the most popular one.
@@ -861,8 +706,6 @@ To try it, delete all the code in `src/App.js` and replace it with any of the ex
 Note that [you may need to configure your production server to support client-side routing](#serving-apps-with-client-side-routing) before deploying your app.
 
 ## Adding Custom Environment Variables
-
->Note: this feature is available with `react-scripts@0.2.3` and higher.
 
 Your project can consume variables declared in your environment as if they were declared locally in your JS files. By
 default you will have `NODE_ENV` defined for you, and any other environment variables starting with
@@ -925,8 +768,6 @@ When you compile the app with `npm run build`, the minification step will strip 
 
 ### Referencing Environment Variables in the HTML
 
->Note: this feature is available with `react-scripts@0.9.0` and higher.
-
 You can also access the environment variables starting with `REACT_APP_` in the `public/index.html`. For example:
 
 ```html
@@ -937,11 +778,6 @@ Note that the caveats from the above section apply:
 
 * Apart from a few built-in variables (`NODE_ENV` and `PUBLIC_URL`), variable names must start with `REACT_APP_` to work.
 * The environment variables are injected at build time. If you need to inject them at runtime, [follow this approach instead](#generating-dynamic-meta-tags-on-the-server).
-
-### Adding Temporary Environment Variables In Your Shell
-
-Defining environment variables can vary between OSes. It’s also important to know that this manner is temporary for the
-life of the shell session.
 
 #### Windows (cmd.exe)
 
@@ -965,21 +801,15 @@ REACT_APP_SECRET_CODE=abcdef npm start
 
 ### Adding Development Environment Variables In `.env`
 
->Note: this feature is available with `react-scripts@0.5.0` and higher.
-
 To define permanent environment variables, create a file called `.env` in the root of your project:
 
 ```basj
 REACT_APP_SECRET_CODE=abcdef
 ```
 
-> Note: You must create custom environment variables beginning with `REACT_APP_`. Any other variables except `NODE_ENV` will be ignored to avoid [accidentally exposing a private key on the machine that could have the same name](https://github.com/facebookincubator/create-react-app/issues/865#issuecomment-252199527). Changing any environment variables will require you to restart the development server if it is running.
-
 `.env` files **should be** checked into source control (with the exclusion of `.env*.local`).
 
 #### What other `.env` files are can be used ?
-
->Note: this feature is **available with `react-scripts@1.0.0` and higher**.
 
 * `.env`: Default.
 * `.env.local`: Local overrides. **This file is loaded for all environments except test.**
@@ -1000,8 +830,6 @@ these defined as well. Consult their documentation how to do this. For example, 
 
 #### Expanding Environment Variables In `.env`
 
->Note: this feature is available with `react-scripts@1.1.0` and higher.
-
 Expand variables already on your machine for use in your `.env` file (using [dotenv-expand](https://github.com/motdotla/dotenv-expand)).
 
 For example, to get the environment variable `npm_package_version`:
@@ -1019,23 +847,6 @@ DOMAIN=www.example.com
 REACT_APP_FOO=$DOMAIN/foo
 REACT_APP_BAR=$DOMAIN/bar
 ```
-
-## Can I Use Decorators?
-
-Many popular libraries use [decorators](https://medium.com/google-developers/exploring-es7-decorators-76ecb65fb841) in their documentation.<br>
-Create React App doesn’t support decorator syntax at the moment because:
-
-* It is an experimental proposal and is subject to change.
-* The current specification version is not officially supported by Babel.
-* If the specification changes, we won’t be able to write a codemod because we don’t use them internally at Facebook.
-
-However in many cases you can rewrite decorator-based code without decorators just as fine.<br>
-Please refer to these two threads for reference:
-
-* [#214](https://github.com/facebookincubator/create-react-app/issues/214)
-* [#411](https://github.com/facebookincubator/create-react-app/issues/411)
-
-Create React App will add decorator support when the specification advances to a stable stage.
 
 ## Fetching Data with AJAX Requests
 
@@ -1063,8 +874,6 @@ Check out [this tutorial](https://www.fullstackreact.com/articles/how-to-get-cre
 You can find the companion GitHub repository [here](https://github.com/fullstackreact/food-lookup-demo-rails).
 
 ## Proxying API Requests in Development
-
->Note: this feature is available with `react-scripts@0.2.3` and higher.
 
 People often serve the front-end React app from the same host and port as their backend implementation.<br>
 For example, a production setup might look like this after the app is deployed:
@@ -1127,8 +936,6 @@ DANGEROUSLY_DISABLE_HOST_CHECK=true
 We don’t recommend this approach.
 
 ### Configuring the Proxy Manually
-
->Note: this feature is available with `react-scripts@1.0.0` and higher.
 
 If the `proxy` option is **not** flexible enough for you, you can specify an object in the following form (in `package.json`).<br>
 You may also specify any configuration value [`http-proxy-middleware`](https://github.com/chimurai/http-proxy-middleware#options) or [`http-proxy`](https://github.com/nodejitsu/node-http-proxy#options) supports.
@@ -1218,8 +1025,6 @@ Either way, you can proxy WebSocket requests manually in `package.json`:
 
 ## Using HTTPS in Development
 
->Note: this feature is available with `react-scripts@0.4.0` and higher.
-
 You may require the dev server to serve pages over HTTPS. One particular case where this could be useful is when using [the "proxy" feature](#proxying-api-requests-in-development) to proxy requests to an API server when that API server is itself serving HTTPS.
 
 To do this, set the `HTTPS` environment variable to `true`, then start the dev server as usual with `npm start`:
@@ -1289,7 +1094,6 @@ Then, on the server, you can replace `__SERVER_DATA__` with a JSON of real data 
 
 ## Running Tests
 
->Note: this feature is available with `react-scripts@0.3.0` and higher.<br>
 >[Read the migration guide to learn how to enable it in older projects!](https://github.com/facebookincubator/create-react-app/blob/master/CHANGELOG.md#migrating-from-023-to-030)
 
 Create React App uses [Jest](https://facebook.github.io/jest/) as its test runner. To prepare for this integration, we did a [major revamp](https://facebook.github.io/jest/blog/2016/09/01/jest-15.html) of Jest so if you heard bad things about it years ago, give it another try.
@@ -1462,8 +1266,6 @@ import { expect } from 'chai';
 and then use them in your tests like you normally do.
 
 ### Initializing Test Environment
-
->Note: this feature is available with `react-scripts@0.4.0` and higher.
 
 If your app uses a browser API that you need to mock in your tests or if you just need a global setup before running your tests, add a `src/setupTests.ts` to your project. It will be automatically executed before running your tests.
 
@@ -2025,7 +1827,7 @@ On a production build, and in a browser that supports [service workers](https://
 the service worker will automatically handle all navigation requests, like for
 `/todos/42`, by serving the cached copy of your `index.html`. This
 service worker navigation routing can be configured or disabled by
-[`eject`ing](#npm-run-eject) and then modifying the
+[`ejecting`](#npm-run-eject) and then modifying the
 [`navigateFallback`](https://github.com/GoogleChrome/sw-precache#navigatefallback-string)
 and [`navigateFallbackWhitelist`](https://github.com/GoogleChrome/sw-precache#navigatefallbackwhitelist-arrayregexp)
 options of the `SWPreachePlugin` [configuration](../config/webpack.config.prod.js).
@@ -2052,8 +1854,6 @@ For example:
 ```
 
 #### Serving the Same Build from Different Paths
-
->Note: this feature is available with `react-scripts@0.9.0` and higher.
 
 If you are not using the HTML5 `pushState` history API or not using client-side routing at all, it is unnecessary to specify the URL from which your app will be served. Instead, you can put this in your `package.json`:
 
@@ -2143,8 +1943,6 @@ Now, after you create a production build with `npm run build`, you can deploy it
 For more information see [Add Firebase to your JavaScript Project](https://firebase.google.com/docs/web/setup).
 
 ### GitHub Pages
-
->Note: this feature is available with `react-scripts@0.2.0` and higher.
 
 #### Step 1: Add `homepage` to `package.json`
 

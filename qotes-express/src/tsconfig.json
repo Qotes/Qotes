@@ -1,0 +1,30 @@
+{
+	"compilerOptions": {
+		"module": "esnext",
+		"target": "es5",
+    "rootDir": ".",
+		"outDir": "../out",
+		"lib": [
+			"es6"
+		],
+    "sourceMap": true,
+    "moduleResolution": "node",
+    "forceConsistentCasingInFileNames": true,
+    "alwaysStrict": true,
+    "strict": true,
+    "strictFunctionTypes": true,
+    "noImplicitReturns": true,
+    "noImplicitThis": true,
+    "noImplicitAny": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": false,
+    "strictNullChecks": true,
+    "suppressImplicitAnyIndexErrors": true,
+    "experimentalDecorators": false,
+    "emitDecoratorMetadata": false,
+    "esModuleInterop": true
+	},
+	"exclude": [
+		"node_modules"
+	]
+}

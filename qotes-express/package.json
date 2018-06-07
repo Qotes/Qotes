@@ -1,0 +1,25 @@
+{
+  "name": "qotes-express",
+  "version": "1.0.0",
+  "description": "Qotes-Express",
+  "main": "index.js",
+  "scripts": {
+    "start": "node ./out/www.js",
+    "test": "mocha ./tests/out/test.js",
+    "compile": "node ./node_modules/typescript/bin/tsc -p ./src",
+    "compiletests": "node ./node_modules/typescript/bin/tsc -p ./tests"
+  },
+  "author": "Sy",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.16.3",
+    "morgan": "^1.9.0"
+  },
+  "devDependencies": {
+    "@types/debug": "^0.0.30",
+    "@types/express": "^4.16.0",
+    "@types/morgan": "^1.7.35",
+    "@types/node": "^10.3.1",
+    "typescript": "^2.9.1"
+  }
+}

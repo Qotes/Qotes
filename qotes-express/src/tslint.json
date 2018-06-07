@@ -1,0 +1,13 @@
+{
+  "linterOptions": {
+    "exclude": [
+      "config/**/*.js",
+      "node_modules/**/*.ts"
+    ]
+  },
+  "rules": {
+    "no-invalid-this": true,
+    "no-this-assignment": true
+    // "completed-docs": true
+  }
+}

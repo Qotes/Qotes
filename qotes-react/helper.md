@@ -424,6 +424,12 @@ In development, expressing dependencies this way allows your styles to be reload
 
 If you are concerned about using Webpack-specific semantics, you can put all your CSS right into `src/index.css`. It would still be imported from `src/index.js`, but you could always remove that import if you later migrate to a different build tool.
 
+## pure
+
+[7 habits of highly effective media queries](http://bradfrost.com/blog/post/7-habits-of-highly-effective-media-queries/#relative)
+
+Customized [pure-grids](https://purecss.io/grids/) by columns with classname `.col-[size]-{n}-{cols}`, which includes `size`: sm/md/lg/xl and `cols`: 1/2/4/6/8/12/24.
+
 ## Post-Processing CSS
 
 This project setup minifies your CSS and adds vendor prefixes to it automatically through [Autoprefixer](https://github.com/postcss/autoprefixer) so you don’t need to worry about it.

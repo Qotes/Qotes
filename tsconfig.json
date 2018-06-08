@@ -1,0 +1,30 @@
+{
+  "compilerOptions": {
+    "target": "es5",
+    "module": "esnext", // prod: commonjs
+    // "baseUrl": ".",
+    // "rootDir": "src",
+    // "outDir": "build/dist",
+    "lib": ["es6"],
+    "sourceMap": true,
+    "allowJs": false,
+    // "checkjs": false,
+    "downlevelIteration": true,
+    // "jsx": "react",
+    "moduleResolution": "node",
+    "forceConsistentCasingInFileNames": true,
+    "alwaysStrict": true,
+    "strict": true,
+    "strictFunctionTypes": true,
+    "noImplicitReturns": true,
+    "noImplicitThis": true,
+    "noImplicitAny": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": false,
+    "strictNullChecks": true,
+    "suppressImplicitAnyIndexErrors": true,
+    "experimentalDecorators": false,
+    "emitDecoratorMetadata": false,
+    "esModuleInterop": true
+  }
+}

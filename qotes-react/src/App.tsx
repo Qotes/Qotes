@@ -1,5 +1,5 @@
-import * as React from "react";
-import { BrowserRouter as Router, Link, Route } from "react-router-dom";
+import * as React from 'react'
+import { BrowserRouter as Router, Link, Route } from 'react-router-dom'
 
 const App = () => (
   <Router>
@@ -23,19 +23,19 @@ const App = () => (
       <Route path="/topics" component={Topics} />
     </div>
   </Router>
-);
+)
 
 const Home = () => (
   <div>
     <h2>Home</h2>
   </div>
-);
+)
 
 const About = () => (
   <div>
     <h2>About</h2>
   </div>
-);
+)
 
 const Topics = ({ match }: { match: any }) => (
   <div>
@@ -60,12 +60,12 @@ const Topics = ({ match }: { match: any }) => (
       render={() => <h3>Please select a topic.</h3>} // https://stackoverflow.com/questions/36677733/why-shouldnt-jsx-props-use-arrow-functions-or-bind
     />
   </div>
-);
+)
 
 const Topic = ({ match }: { match: any }) => (
   <div>
     <h3>{match.params.topicId}</h3>
   </div>
-);
+)
 
 export default App

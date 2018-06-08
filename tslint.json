@@ -1,0 +1,37 @@
+{
+  "extends": ["tslint:recommended", "tslint-config-prettier"],
+  "linterOptions": {
+    "exclude": [
+      "config/**/*.js",
+      "node_modules/**/*.ts"
+    ]
+  },
+  "rules": {
+    "no-invalid-this": true,
+    "no-this-assignment": true,
+    // "completed-docs": true,
+    "no-constant-condition": true,
+    "no-multi-spaces": true,
+    "quotemark": [true, "single", "jsx-double"],
+    "semicolon": [true, "never"],
+    "no-any": false,
+    "member-access": false,
+    "prefer-function-over-method": false,
+    "typedef": false,
+    "space-before-function-paren": [true, "always"],
+    "no-null-keyword": false,
+    "member-ordering": false,
+    "variable-name": false,
+    "no-unused-expression": false,
+    "trailing-comma": false,
+    "arrow-parens": [true, "ban-single-arg-parens"],
+    "object-literal-sort-keys": false,
+    "only-arrow-functions": [true, "allow-declarations", "allow-named-functions"],
+    "no-default-export": false,
+    "no-empty": false,
+    "align": false,
+    "type-literal-delimiter": false,
+    "no-magic-numbers": false,
+    "newline-before-return": false
+  }
+}

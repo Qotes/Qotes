@@ -1,31 +1,11 @@
 {
+  "extends": "../tsconfig.json",
   "compilerOptions": {
-    "target": "es5",
     "baseUrl": ".",
     "rootDir": "src",
     "outDir": "build/dist",
-    "module": "esnext", // prod: commonjs
     "lib": ["es6", "dom"],
-    "sourceMap": true,
-    "allowJs": true,
-    // "checkjs": false,
-    "downlevelIteration": true,
-    "jsx": "react",
-    "moduleResolution": "node",
-    "forceConsistentCasingInFileNames": true,
-    "alwaysStrict": true,
-    "strict": true,
-    "strictFunctionTypes": true,
-    "noImplicitReturns": true,
-    "noImplicitThis": true,
-    "noImplicitAny": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": false,
-    "strictNullChecks": true,
-    "suppressImplicitAnyIndexErrors": true,
-    "experimentalDecorators": false,
-    "emitDecoratorMetadata": false,
-    "esModuleInterop": true
+    "jsx": "react"
   },
   "exclude": [
     "node_modules",

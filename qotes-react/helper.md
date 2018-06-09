@@ -331,7 +331,7 @@ If you are concerned about using Webpack-specific semantics, you can put all you
 
 [7 habits of highly effective media queries](http://bradfrost.com/blog/post/7-habits-of-highly-effective-media-queries/#relative)
 
-Customized [pure-grids](https://purecss.io/grids/) by columns with classname `.col-[size]-{n}-{cols}`, which includes `size`: sm/md/lg/xl and `cols`: 1/2/4/6/8/12/24.
+Customized [pure-grids](https://purecss.io/grids/) by columns with classname `.col-[size]-{n}-{cols}`, which includes `size`: sm/md/lg/xl and `cols`: 1/2/3/4/24.
 
 ## Post-Processing CSS
 
